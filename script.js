@@ -57,19 +57,28 @@ class Cobra extends Entidade {
            this.y + this.altura > comida.y
        ){ 
            this.#houveColisao(comida)
-           this.pontos()
+           
+           pontos()
        }
    }
    #houveColisao(comida){
        comida.x = Math.random()*canvas.width-10
        comida.y = Math.random()*canvas.height-10
    }
-   pontos(){
-        // ver os pontos no console do inspecionar e o record fica no debug console ( é só procurar)
-        console.log("pontos")
+   colisao(){
+    if(this.x < 0 || this.x + this.largura > canvas.width || this.y < 0 || this.y + this.altura > canvas.height){
+        location.reload()
+        console.log('perdeu')
+    }
    }
    
 }
+
+function pontos(){
+    // ver os pontos no console do inspecionar e o total de pontos fica no debug console ( é só procurar)
+    console.log('pontos')
+}
+
 
 class Comida extends Entidade {
    constructor() {
@@ -86,6 +95,7 @@ function loop() {
    ctx.clearRect(0, 0, canvas.width, canvas.height)
    cobra.desenhar(ctx, cor = 'orange')
    cobra.atualizar()
+   cobra.colisao()
    comida.desenhar(ctx, cor = 'green')
    cobra.verificarColisao(comida)
    requestAnimationFrame(loop)
