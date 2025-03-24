@@ -1,13 +1,13 @@
 const canvas = document.getElementById('jogoCanvas')
 const ctx = canvas.getContext('2d')
 
-
 const teclasPressionadas = {
    KeyW: false,
    KeyS: false,
    KeyD: false,
    KeyA: false
 };
+
 document.addEventListener('keydown', (e) => {
    for (let tecla in teclasPressionadas) {
        if (teclasPressionadas.hasOwnProperty(e.code)) {
@@ -28,7 +28,7 @@ class Entidade {
        this.altura = altura
    }
    desenhar (){
-       ctx.fillStyle = 'black'
+       ctx.fillStyle = cor
        ctx.fillRect(this.x, this.y, this.largura, this.altura)
    }
 }
@@ -57,13 +57,20 @@ class Cobra extends Entidade {
            this.y + this.altura > comida.y
        ){ 
            this.#houveColisao(comida)
+           this.pontos()
        }
    }
    #houveColisao(comida){
        comida.x = Math.random()*canvas.width-10
        comida.y = Math.random()*canvas.height-10
    }
+   pontos(){
+        // ver os pontos no console do inspecionar e o record fica no debug console ( é só procurar)
+        console.log("pontos")
+   }
+   
 }
+
 class Comida extends Entidade {
    constructor() {
        super(Math.random()*canvas.width-10, Math.random()*canvas.height-10, 20, 20)
@@ -77,9 +84,9 @@ const comida = new Comida()
 
 function loop() {
    ctx.clearRect(0, 0, canvas.width, canvas.height)
-   cobra.desenhar()
+   cobra.desenhar(ctx, cor = 'orange')
    cobra.atualizar()
-   comida.desenhar()
+   comida.desenhar(ctx, cor = 'green')
    cobra.verificarColisao(comida)
    requestAnimationFrame(loop)
 }
